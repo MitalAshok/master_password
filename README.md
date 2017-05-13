@@ -3,10 +3,44 @@ master_password
 
 `master_password` is a Python implementation of the Master Password ([Lyndir/MasterPassword](https://github.com/Lyndir/MasterPassword), [Site](http://masterpasswordapp.com/)) algorithm.
 
+Installation
+------------
+
+Either install with [pip](https://pypi.python.org/pypi/master_password) using the command:
+
+```bash
+$ pip install master_password
+```
+
+Or directly from the here:
+
+```bash
+$ git clone https://github.com/MitalAshok/master_password.git
+$ python master_password/setup.py install
+```
+
+Note that if your Python installation does not come with a `hashlib.scrypt` function, please also install [`scrypt`](https://pypi.python.org/pypi/scrypt) as well.
+
+```bash
+$ pip install master_password[scrypt]
+```
+
+On Windows, `scrypt` doesn't work, so install with [`pyscrypt`](https://github.com/ricmoo/pyscrypt) instead.
+
+```bash
+> pip install master_password[pyscrypt]
+```
+
 Usage
 -----
 
 Note: All strings are assumed to be encoded in UTF-8, but you can also provide a `bytes` or `bytearray` in a different encoding.
+
+To use the command line interface, run as a module.
+
+```bash
+$ python -m master_password
+```
 
 Generate a password for someone with the fullname _John Smith_ and the password _example password_ for the domain _example.org_
 
