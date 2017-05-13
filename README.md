@@ -22,7 +22,7 @@ $ python master_password/setup.py install
 Note that if your Python installation does not come with a `hashlib.scrypt` function, please also install [`scrypt`](https://pypi.python.org/pypi/scrypt) as well.
 
 ```bash
-$ pip install master_password[scrypt]
+$ sudo pip install master_password[scrypt]
 ```
 
 On Windows, `scrypt` doesn't work, so install with [`pyscrypt`](https://github.com/ricmoo/pyscrypt) instead.
