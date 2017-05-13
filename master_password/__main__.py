@@ -165,10 +165,25 @@ def main(argv=sys.argv[1:]):
             'password': 'long', 'login': 'name', 'answer': 'phrase'
         }[namespace]
 
-    if mpw is None:
+    debug = mpw is not None
+    if debug:
+        print(args)
+        print('Full name: ' + repr(full_name))
+        print('Template: ' + repr(template))
+        print('Counter: ' + repr(counter))
+        print('Version: ' + repr(version))
+        print('Namespace: ' + repr(namespace))
+        print('Context: ' + repr(context))
+        print('Site: ' + repr(site))
+        print('Password: ' + repr(mpw))
+    else:
         mpw = _getpass()
 
     mpw = master_password.MPW(full_name, mpw, version=version)
+
+    if debug:
+        print('Key: ' + repr(mpw.key))
+        print('Seed: ' + repr(mpw.seed(site, namespace, counter, context)))
 
     print(mpw.generate(site, counter, context, template, namespace))
 

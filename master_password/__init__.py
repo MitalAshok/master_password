@@ -30,7 +30,7 @@ __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
                'Mital Ashok']
 __license__ = 'GPL-3.0'
-__version__ = '1.1.3'
+__version__ = '1.1.4'
 __maintainer__ = 'Mital Ashok'
 __author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
 __status__ = 'Production'
@@ -119,7 +119,7 @@ class MPW(tuple):
             namespace = self.namespace.name
         else:
             try:
-                namespace = getattr(self.namespace, encode_if(namespace),
+                namespace = getattr(self.namespace, decode_if(namespace),
                                     decode_if(namespace))
             except TypeError:
                 pass
