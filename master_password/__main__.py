@@ -26,6 +26,13 @@ def _getpass(prompt='Your master password: ', confirm_prompt=None,
         print(error)
 
 
+try:
+    # Never need Python 2's eval(input()) anyways.
+    input = raw_input
+except NameError:
+    pass
+
+
 _HELP = {
     'name': (
         'R|'
