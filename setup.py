@@ -1,15 +1,29 @@
 from setuptools import setup, find_packages
 
+import sys
+import unittest
+
 from codecs import open
 from os import path
 
-__version__ = '1.0.1'
 
 __dir__ = path.abspath(path.dirname(__file__))
 
+# To prevent a redundant __version__, import it from the packages
+sys.path.insert(0, __dir__)
+
+try:
+    from master_password import __version__
+finally:
+    sys.path.pop(0)
 
 with open(path.join(__dir__, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
+
+
+def test_suite():
+    test_loader = unittest.TestLoader()
+    return test_loader.discover(__dir__, pattern='tests*.py')
 
 setup_args = dict(
     name='master_password',
@@ -27,7 +41,7 @@ setup_args = dict(
     license='GPL-3.0',
 
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
 
         'Topic :: Security',
 
@@ -61,7 +75,9 @@ setup_args = dict(
         'console_scripts': [
             'master_password=master_password.__main__:main',
         ]
-    }
+    },
+
+    test_suite='setup.test_suite'
 )
 
 

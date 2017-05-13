@@ -1,18 +1,20 @@
 __all__ = ('encode_if', 'decode_if', 'uint8_list')
 
 
+unicode = type(u'')
+
 def encode_if(s, errors='strict', encoding='utf-8'):
-    if isinstance(s, str):
-        return str.encode(s, encoding, errors)
+    if isinstance(s, unicode):
+        return unicode.encode(s, encoding, errors)
     return bytes(s)
 
 
 def decode_if(s, errors='strict', encoding='utf-8'):
-    if isinstance(s, (tuple, list)):
-        return bytearray(s).decode(encoding, errors)
     if isinstance(s, (bytes, bytearray)):
         return s.decode(encoding, errors)
-    return str(s)
+    if isinstance(s, (tuple, list)):
+        return bytearray(s).decode(encoding, errors)
+    return unicode(s)
 
 
 def uint8_list(uint_32):

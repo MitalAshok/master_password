@@ -127,6 +127,8 @@ class MPWNameSpace(tuple):
         return self[3]
 
     def __repr__(self):
-        return '{}({!r})'.format(type(self).__qualname__, self.name.decode())
+        return '{}({!r})'.format(
+            getattr(type(self), '__qualname__', type(self).__name__),
+            self.name.decode())
 
 default = MPWNameSpace.create('com.lyndir.masterpassword')

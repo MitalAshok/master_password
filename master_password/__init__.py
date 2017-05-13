@@ -28,10 +28,10 @@ __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
                'Mital Ashok']
 __license__ = 'GPL-3.0'
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 __maintainer__ = 'Mital Ashok'
-__email__ = 'mital.vaja[AT]googlemail.com'
-__status__ = 'Development'
+__author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
+__status__ = 'Production'
 
 
 scrypt = None
@@ -106,8 +106,8 @@ class MPW(tuple):
 
     @staticmethod
     def calculate_key(master_password, salt):
-        return scrypt(encode_if(master_password), salt,
-                      SCRYPT_N, SCRYPT_r, SCRYPT_p, SCRYPT_dk_len)
+        return bytearray(scrypt(encode_if(master_password), salt,
+                                SCRYPT_N, SCRYPT_r, SCRYPT_p, SCRYPT_dk_len))
 
     def seed(self, site, namespace=None, counter=1, context=None):
         if namespace is None:
@@ -123,7 +123,8 @@ class MPW(tuple):
             data.extend(uint8_list(len(context)))
             data.extend(context)
 
-        return hmac.new(self.key, bytes(data), hashlib.sha256).digest()
+        return bytearray(
+            hmac.new(self.key, bytes(data), hashlib.sha256).digest())
 
     def generate(self, site, counter=1, context=None,
                  template='long', namespace=None, extended=False):
@@ -141,6 +142,8 @@ class MPW(tuple):
                 namespace = getattr(self.namespace, encode_if(namespace),
                                     decode_if(namespace))
             except TypeError:
+                pass
+            except ValueError:
                 pass
             namespace = encode_if(getattr(namespace, 'name', namespace))
         seed = self.seed(site, namespace, counter, context)

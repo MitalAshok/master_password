@@ -4,9 +4,12 @@ import unittest
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 
-sys.path.append(os.path.abspath(os.path.join(__dir__, '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(__dir__, '..')))
 
-from master_password import *
+try:
+    from master_password import *
+finally:
+    sys.path.pop(0)
 
 
 class MPWTest(unittest.TestCase):
