@@ -19,4 +19,5 @@ if scrypt is None:
         error = ModuleNotFoundError
     except NameError:
         error = ImportError
-    raise error(msg)
+    def scrypt(N, r, p, dk_len):
+        raise error(msg)
