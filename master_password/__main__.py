@@ -26,50 +26,17 @@ def _getpass(prompt='Your master password: ', confirm_prompt=None,
         print(error)
 
 
-def interactive():
-    name = bytes(_getpass('Full name: '), 'utf-8')
-    print()
-    password = bytes(_getpass(), 'utf-8')
-    print(end='\nCalculating key...')
-    mpw = master_password.MPW(name, password, keep_name=False)
-    del name, password
-    print(
-          '\rCalculated key!\x00\x00\x00'
-          '\n'
-          '\n'
-          'Options:\n'
-          '[0]: password\n'
-          '[1]: username\n'
-          '[2]: security question answer\n'
-          '[3]: pin\n')
-    while True:
-        site = input('[q] to quit or enter site name: ').strip()
-        if site.lower() == 'q':
-            break
-        while True:
-            try:
-                mode = input('Method [0-3] or [q]: ')
-                if mode.strip().lower() == 'q':
-                    break
-                mode = int(mode)
-                if mode < 0 or mode > 3:
-                    raise ValueError
-            except ValueError:
-                print('Please enter 0, 1, 2, 3 or q.')
-                continue
-            tmp = ['password', 'login', 'answer', 'pin'][mode]
-            print(getattr(mpw, tmp)(site))
-
-
 _HELP = {
     'name': (
+        'R|'
         'Specify the full name of the user.\n'
         '    Defaults to {env[name]} in env or prompts.'
     ).format(env=_ENV),
     'type': (
+        'R|'
         'Specify the password\'s template.\n'
-        'Defaults to {env[template]} in env or \'long\' for password, '
-        '\'name\' for login.\n'
+        '    Defaults to {env[template]} in env or '
+        '\'long\' for password, \'name\' for login.\n'
         '        x, max, maximum | 20 characters, contains symbols.\n'
         '        l, long         | '
         'Copy-friendly, 14 characters, contains symbols.\n'
@@ -82,14 +49,17 @@ _HELP = {
         '        p, phrase       | 20 character sentence.'
     ).format(env=_ENV),
     'counter': (
+        'R|'
         'The value of the counter.\n'
         '    Defaults tp {env[counter]} in env or 1.'
     ).format(env=_ENV),
     'version': (
+        'R|'
         'The algorithm version to use.\n'
         '    Defaults to {env[version]} in env or 3.'
     ).format(env=_ENV),
     'variant': (
+        'R|'
         'The kind of content to generate.\n'
         '    Defaults to \'password\'.\n'
         '        p, password | The password to log in with.\n'
@@ -97,6 +67,7 @@ _HELP = {
         '        a, answer   | The answer to a security question.'
     ),
     'context': (
+        'R|'
         'A variant-specific context.\n'
         '    Defaults to empty.\n'
         '        Empty for a universal site answer or\n'
@@ -116,9 +87,16 @@ _TYPE_CHOICES = (
 _VERSION_CHOICES = (0, 1, 2, 3)
 
 
+class RawFormatter(argparse.HelpFormatter):
+    def _split_lines(self, text, width):
+        if text.startswith('R|'):
+            return text[2:].splitlines()
+        return argparse.HelpFormatter._split_lines(self, text, width)
+
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(description='Master Password CLI',
-                                     prog='master_password')
+                                     prog='master_password',
+                                     formatter_class=RawFormatter)
     parser.add_argument('-u', metavar='name', help=_HELP['name'],
                         default=os.environ.get(_ENV['name']))
     type_default = os.environ.get(_ENV['template'], '').strip().lower()
