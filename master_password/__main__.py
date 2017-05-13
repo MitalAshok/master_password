@@ -135,6 +135,9 @@ def main(argv=sys.argv[1:]):
     parser.add_argument('-C', metavar='context', help=_HELP['context'],
                         default=None)
     parser.add_argument('site', help=_HELP['site'], nargs='?', default=None)
+
+    parser.add_argument('-P', metavar='password', help=argparse.SUPPRESS, default=None)
+
     args = parser.parse_args(argv)
 
     full_name = args.u
@@ -144,6 +147,8 @@ def main(argv=sys.argv[1:]):
     namespace = args.V
     context = args.C
     site = args.site
+
+    mpw = args.P  # Do not use. Insecure. For testing purposes only.
 
     if full_name is None:
         full_name = input('Your full name: ')
@@ -160,7 +165,8 @@ def main(argv=sys.argv[1:]):
             'password': 'long', 'login': 'name', 'answer': 'phrase'
         }[namespace]
 
-    mpw = _getpass()
+    if mpw is None:
+        mpw = _getpass()
 
     mpw = master_password.MPW(full_name, mpw, version=version)
 

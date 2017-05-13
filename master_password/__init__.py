@@ -23,14 +23,14 @@ import master_password.datatypes
 from master_password.helpers import encode_if, decode_if, uint8_list
 from master_password.datatypes import MPWNameSpace, MPWTemplate
 
-from master_password._scrypt import scrypt
+from master_password._get_scrypt import scrypt
 
 
 __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
                'Mital Ashok']
 __license__ = 'GPL-3.0'
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 __maintainer__ = 'Mital Ashok'
 __author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
 __status__ = 'Production'
