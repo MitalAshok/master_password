@@ -42,7 +42,7 @@ setup_args = dict(
         'Programming Language :: Python :: 3.5',
     ],
 
-    keywords='masterpassword statelesspassword password',
+    keywords=['masterpassword', 'statelesspassword', 'password'],
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
