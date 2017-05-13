@@ -23,6 +23,8 @@ import master_password.datatypes
 from master_password.helpers import encode_if, decode_if, uint8_list
 from master_password.datatypes import MPWNameSpace, MPWTemplate
 
+from master_password._scrypt import scrypt
+
 
 __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
@@ -32,28 +34,6 @@ __version__ = '1.1.0'
 __maintainer__ = 'Mital Ashok'
 __author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
 __status__ = 'Production'
-
-
-scrypt = None
-
-try:
-    scrypt = hashlib.scrypt
-except AttributeError:
-    try:
-        from scrypt import hash as scrypt
-    except ImportError:
-        try:
-            from pyscrypt import hash as scrypt
-        except ImportError:
-            pass
-
-if scrypt is None:
-    msg = "No module named 'scrypt' or 'pyscrypt'"
-    try:
-        error = ModuleNotFoundError
-    except NameError:
-        error = ImportError
-    raise error(msg)
 
 __all__ = ('MPWNameSpace', 'MPWTemplate', 'MPW_DEFAULT_NAMESPACE', 'MPW')
 
