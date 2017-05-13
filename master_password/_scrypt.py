@@ -3,8 +3,8 @@ __all__ = ('scrypt',)
 scrypt = None
 
 try:
-    scrypt = hashlib.scrypt
-except AttributeError:
+    from hashlib import scrypt
+except ImportError:
     try:
         from scrypt import hash as scrypt
     except ImportError:
