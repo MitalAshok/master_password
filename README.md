@@ -40,6 +40,8 @@ To use the command line interface, run as a module.
 
 ```bash
 $ python -m master_password
+$ # Or just
+$ master_password
 ```
 
 Generate a password for someone with the fullname _John Smith_ and the password _example password_ for the domain _example.org_
