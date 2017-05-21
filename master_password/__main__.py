@@ -187,7 +187,7 @@ def main(argv=sys.argv[1:]):
     else:
         mpw = _getpass()
 
-    sys.stdout.write('{}\'s password for {}:'.format(full_name, site))
+    sys.stdout.write('{}\'s password for {}:\n'.format(full_name, site))
 
     if args.i:
         identicon = master_password.MPW.identicon(full_name, mpw)
@@ -195,12 +195,10 @@ def main(argv=sys.argv[1:]):
         if debug:
             print('Identicon: ' + repr(identicon.encode('utf-8')) + '\n')
 
-        sys.stdout.write('\n[ ')
+        sys.stdout.write('[ ')
         sys.stdout.write(identicon)
         sys.stdout.write(' ]: ')
         sys.stdout.flush()
-    else:
-        sys.stdout.write(' ')
 
     mpw = master_password.MPW(full_name, mpw, version=version)
 

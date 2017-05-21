@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from setuptools import setup, find_packages
 
 import sys
@@ -67,7 +69,9 @@ setup_args = dict(
     # $ pip install master_password[pyscrypt]
     extras_require={
         'scrypt': ['scrypt'],
-        'pyscrypt': ['pyscrypt']
+        'pyscrypt': ['pyscrypt'],
+        'mpsites': ['jwcrypto'],
+        'crypto': ['cryptography']
     },
 
 
