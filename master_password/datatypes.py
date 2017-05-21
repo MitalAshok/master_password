@@ -3,10 +3,12 @@ from master_password.helpers import encode_if, decode_if
 __all__ = ('MPWTemplate', 'MPWNameSpace', 'default')
 
 DEFAULT_CHARS = {
-  ' ': ' ', 'A': 'AEIOUBCDFGHJKLMNPQRSTVWXYZ', 'C': 'BCDFGHJKLMNPQRSTVWXYZ', 'V': 'AEIOU',
-  'a': 'AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz', 'c': 'bcdfghjklmnpqrstvwxyz',
-  'n': '0123456789', 'o': "@&%?,=[]_:-+*$#!'^~;()/.", 'v': 'aeiou',
-  'x': 'AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()'
+    ' ': ' ', 'A': 'AEIOUBCDFGHJKLMNPQRSTVWXYZ', 'C': 'BCDFGHJKLMNPQRSTVWXYZ',
+    'V': 'AEIOU', 'a': 'AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz',
+    'c': 'bcdfghjklmnpqrstvwxyz', 'n': '0123456789',
+    'o': "@&%?,=[]_:-+*$#!'^~;()/.", 'v': 'aeiou',
+    'x': 'AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfg'
+         'hjklmnpqrstvwxyz0123456789!@#$%^&*()'
 }
 
 DEFAULT_TEMPLATES = {

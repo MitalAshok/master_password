@@ -1,7 +1,7 @@
 __all__ = ('encode_if', 'decode_if', 'uint8_list')
 
-
 unicode = type(u'')
+
 
 def encode_if(s, errors='strict', encoding='utf-8'):
     if isinstance(s, unicode):

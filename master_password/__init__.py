@@ -53,7 +53,8 @@ class MPW(tuple):
     def __new__(cls, full_name, master_password,
                 namespace=MPW_DEFAULT_NAMESPACE, version=3, keep_name=True):
         """
-        Create a new MPW by calculating the key from the full_name and master_password
+        Create a new MPW object by calculating the key from
+        the full_name and master_password
 
         full_name: The full full_name of the person to calculate the key with
         master_password: The password to calculate the key with
@@ -77,7 +78,8 @@ class MPW(tuple):
         """Create a new MPW from a pre-calculated key"""
         if full_name is not None:
             full_name = decode_if(full_name)
-        return tuple.__new__(cls, (encode_if(key), namespace, version, full_name))
+        return tuple.__new__(cls,
+                             (encode_if(key), namespace, version, full_name))
 
     @staticmethod
     def calculate_salt(full_name, namespace=MPW_DEFAULT_NAMESPACE):
@@ -152,16 +154,19 @@ class MPW(tuple):
         return ''.join(password)
 
     def password(self, site, counter=1, template='long'):
-        return self.generate(site, counter, None, template, self.namespace.password)
+        return self.generate(
+            site, counter, None, template, self.namespace.password)
 
     def login(self, site, counter=1):
         return self.generate(site, counter, None, 'name', self.namespace.login)
 
     def answer(self, site, counter=1, context=''):
-        return self.generate(site, counter, context, 'phrase', self.namespace.answer)
+        return self.generate(
+            site, counter, context, 'phrase', self.namespace.answer)
 
     def pin(self, site, counter=1):
-        return self.generate(site, counter, None, 'pin', self.namespace.password)
+        return self.generate(
+            site, counter, None, 'pin', self.namespace.password)
 
     @property
     def key(self):
@@ -202,8 +207,8 @@ class MPW(tuple):
 
     @classmethod
     def identicon(cls, full_name, master_password):
-        seed = bytearray(
-            hmac.new(encode_if(master_password), encode_if(full_name), hashlib.sha256).digest())
+        seed = bytearray(hmac.new(encode_if(
+            master_password), encode_if(full_name), hashlib.sha256).digest())
         return ''.join(
             c[seed[i] % len(c)] for i, c in enumerate(cls.identicon_characters)
         )
@@ -239,5 +244,5 @@ class MPW(tuple):
 
 if __name__ == '__main__':
     import sys
-    import master_password.__main__
-    master_password.__main__.main(sys.argv[1:])
+    from master_password.__main__ import main
+    main(sys.argv[1:])

@@ -7,7 +7,9 @@ import collections
 
 import jwcrypto.jwe
 
-from master_password import SCRYPT_N, SCRYPT_r, SCRYPT_p, SCRYPT_dk_len, scrypt, encode_if
+from master_password import (
+    SCRYPT_N, SCRYPT_r, SCRYPT_p, SCRYPT_dk_len, scrypt, encode_if
+)
 
 
 def encode(users, default, version=2):

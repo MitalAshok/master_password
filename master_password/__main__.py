@@ -25,8 +25,9 @@ _ENV = {
 if sys.version_info < (3,):
     input = raw_input
 
+
 def _getpass(prompt='Your master password: ', confirm_prompt=None,
-              error='Does not match!\n'):
+             error='Does not match!\n'):
     if confirm_prompt is None:
         confirm_prompt = 'Confirm ' + prompt.lower()
     while True:
@@ -105,6 +106,7 @@ class RawFormatter(argparse.HelpFormatter):
         if text.startswith('R|'):
             return text[2:].splitlines()
         return argparse.HelpFormatter._split_lines(self, text, width)
+
 
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(description='Master Password CLI',
@@ -207,7 +209,6 @@ def main(argv=sys.argv[1:]):
     if debug:
         print('Key: ' + repr(mpw.key))
         print('Seed: ' + repr(mpw.seed(site, namespace, counter, context)))
-
 
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ except ImportError:
         from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
         from cryptography.hazmat.backends import default_backend
         backend = default_backend()
+
         def scrypt(password, salt, N, r, p, dk_len):
             kdf = Scrypt(salt, dk_len, N, r, p, backend)
             return kdf.derive(password)
@@ -24,8 +25,9 @@ except ImportError:
 if scrypt is None:
     msg = "No module named 'scrypt' or 'pyscrypt'"
     try:
-        error = ModuleNotFoundError
+        error = ModuleNotFoundError(msg)
     except NameError:
-        error = ImportError
-    def scrypt(N, r, p, dk_len):
-        raise error(msg)
+        error = ImportError(msg)
+
+    def scrypt(password, salt, N, r, p, dk_len):
+        raise error
