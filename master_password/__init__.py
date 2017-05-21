@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 OOP implementation of the Master Password algorithm
 
@@ -17,8 +19,8 @@ USAGE:
 import hmac
 import hashlib
 
-import master_password.helpers
-import master_password.datatypes
+import master_password.helpers as helpers
+import master_password.datatypes as datatypes
 
 from master_password.helpers import encode_if, decode_if, uint8_list
 from master_password.datatypes import MPWNameSpace, MPWTemplate
@@ -30,14 +32,14 @@ __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
                'Mital Ashok']
 __license__ = 'GPL-3.0'
-__version__ = '1.1.4'
+__version__ = '1.2.0'
 __maintainer__ = 'Mital Ashok'
 __author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
 __status__ = 'Production'
 
 __all__ = ('MPWNameSpace', 'MPWTemplate', 'MPW_DEFAULT_NAMESPACE', 'MPW')
 
-MPW_DEFAULT_NAMESPACE = master_password.datatypes.default
+MPW_DEFAULT_NAMESPACE = datatypes.default
 
 SCRYPT_N = 32768
 SCRYPT_r = 8
@@ -177,6 +179,35 @@ class MPW(tuple):
     def full_name(self):
         return self[3]
 
+    identicon_characters = (
+        (u'\u2554', u'\u255A', u'\u2570', u'\u2550'),  # left_arm
+        (
+            u'\u2588', u'\u2591', u'\u2592',
+            u'\u2593', u'\u263A', u'\u263B'
+        ),  # body
+        (u'\u2557', u'\u255D', u'\u256F', u'\u2550'),  # right_arm
+        (
+            u'\u25C8', u'\u25CE', u'\u25D0', u'\u25D1', u'\u25D2', u'\u25D3',
+            u'\u2600', u'\u2601', u'\u2602', u'\u2603', u'\u2604', u'\u2605',
+            u'\u2606', u'\u260E', u'\u260F', u'\u2388', u'\u2302', u'\u2618',
+            u'\u2622', u'\u2623', u'\u2615', u'\u231A', u'\u231B', u'\u23F0',
+            u'\u26A1', u'\u26C4', u'\u26C5', u'\u2614', u'\u2654', u'\u2655',
+            u'\u2656', u'\u2657', u'\u2658', u'\u2659', u'\u265A', u'\u265B',
+            u'\u265C', u'\u265D', u'\u265E', u'\u265F', u'\u2668', u'\u2669',
+            u'\u266A', u'\u266B', u'\u2690', u'\u2691', u'\u2694', u'\u2696',
+            u'\u2699', u'\u26A0', u'\u2318', u'\u23CE', u'\u2704', u'\u2706',
+            u'\u2708', u'\u2709', u'\u270C'
+        )  # accessory
+    )
+
+    @classmethod
+    def identicon(cls, full_name, master_password):
+        seed = bytearray(
+            hmac.new(encode_if(master_password), encode_if(full_name), hashlib.sha256).digest())
+        return ''.join(
+            c[seed[i] % len(c)] for i, c in enumerate(cls.identicon_characters)
+        )
+
     def __repr__(self):
         if self.full_name is None:
             info = 'for <anonymous> at'
@@ -205,3 +236,8 @@ class MPW(tuple):
 
     def __lt__(self, other):
         return NotImplemented
+
+if __name__ == '__main__':
+    import sys
+    import master_password.__main__
+    master_password.__main__.main(sys.argv[1:])

@@ -5,7 +5,15 @@ import sys
 import argparse
 import getpass
 
-import master_password
+_PACKAGE_DIR = os.path.abspath(
+    os.path.join(os.path.abspath(os.path.dirname(__file__)), '..'))
+# Ensure that the import can happen correctly
+sys.path.insert(0, _PACKAGE_DIR)
+
+try:
+    import master_password
+finally:
+    sys.path.pop(0)
 
 _ENV = {
     'name': 'MP_FULLNAME',
@@ -14,6 +22,8 @@ _ENV = {
     'version': 'MP_ALGORITHM'
 }
 
+if sys.version_info < (3,):
+    input = raw_input
 
 def _getpass(prompt='Your master password: ', confirm_prompt=None,
               error='Does not match!\n'):
@@ -24,13 +34,6 @@ def _getpass(prompt='Your master password: ', confirm_prompt=None,
         if getpass.getpass(confirm_prompt) == first:
             return first
         print(error)
-
-
-try:
-    # Never need Python 2's eval(input()) anyways.
-    input = raw_input
-except NameError:
-    pass
 
 
 _HELP = {
@@ -80,8 +83,11 @@ _HELP = {
         '        Empty for a universal site answer or\n'
         '        the most significant word(s) of the question.'
     ),
-    'site': (
-        'The site to generate a password for.'
+    'site': 'The site to generate a password for.',
+    'identicon': (
+        'Disables the identicon, which are 4 characters generated from '
+        'your full name and password which are different for different '
+        'names and passwords. Helps spot typos.'
     )
 }
 
@@ -135,8 +141,10 @@ def main(argv=sys.argv[1:]):
     parser.add_argument('-C', metavar='context', help=_HELP['context'],
                         default=None)
     parser.add_argument('site', help=_HELP['site'], nargs='?', default=None)
+    parser.add_argument('-i', help=_HELP['identicon'], action='store_false')
 
-    parser.add_argument('-P', metavar='password', help=argparse.SUPPRESS, default=None)
+    parser.add_argument('-P', metavar='password', help=argparse.SUPPRESS,
+                        default=None)
 
     args = parser.parse_args(argv)
 
@@ -179,13 +187,29 @@ def main(argv=sys.argv[1:]):
     else:
         mpw = _getpass()
 
+    sys.stdout.write('{}\'s password for {}:'.format(full_name, site))
+
+    if args.i:
+        identicon = master_password.MPW.identicon(full_name, mpw)
+
+        if debug:
+            print('Identicon: ' + repr(identicon.encode('utf-8')) + '\n')
+
+        sys.stdout.write('\n[ ')
+        sys.stdout.write(identicon)
+        sys.stdout.write(' ]: ')
+        sys.stdout.flush()
+    else:
+        sys.stdout.write(' ')
+
     mpw = master_password.MPW(full_name, mpw, version=version)
+
+    print(mpw.generate(site, counter, context, template, namespace))
 
     if debug:
         print('Key: ' + repr(mpw.key))
         print('Seed: ' + repr(mpw.seed(site, namespace, counter, context)))
 
-    print(mpw.generate(site, counter, context, template, namespace))
 
 
 if __name__ == '__main__':
