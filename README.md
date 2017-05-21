@@ -25,11 +25,14 @@ Note that if your Python installation does not come with a `hashlib.scrypt` func
 $ sudo pip install master_password[scrypt]
 ```
 
-On Windows, `scrypt` doesn't work, so install with [`pyscrypt`](https://github.com/ricmoo/pyscrypt) instead.
+On Windows, `scrypt` doesn't work, so install with [`cryptography`](https://github.com/pyca/cryptography) or [`pyscrypt`](https://github.com/ricmoo/pyscrypt) instead.
 
 ```bash
+> pip install master_password[crypto]
 > pip install master_password[pyscrypt]
 ```
+
+(Note that cryptography and pyscrypt work on both OSs, but pyscrypt is much slower. It is only listed for cases where C extensions cannot be installed.)
 
 Usage
 -----

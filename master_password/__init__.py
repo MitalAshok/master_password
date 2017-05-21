@@ -32,7 +32,7 @@ __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
                'Mital Ashok']
 __license__ = 'GPL-3.0'
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 __maintainer__ = 'Mital Ashok'
 __author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
 __status__ = 'Production'
