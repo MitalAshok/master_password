@@ -50,8 +50,10 @@ SCRYPT_dk_len = 64
 class MPW(tuple):
     """Represents information to do the Master Password algorithm"""
 
-    def __new__(cls, full_name, master_password,
-                namespace=MPW_DEFAULT_NAMESPACE, version=3, keep_name=True):
+    def __new__(
+            cls, full_name, master_password, namespace=MPW_DEFAULT_NAMESPACE,
+            version=3, keep_name=True
+    ):
         """
         Create a new MPW object by calculating the key from
         the full_name and master_password
@@ -72,14 +74,21 @@ class MPW(tuple):
             full_name = decode_if(full_name)
         return tuple.__new__(cls, (key, namespace, version, full_name))
 
+    def __init__(
+            self, full_name, master_password, namespace=None,
+            version=None, keep_name=None
+    ):
+        super(MPW, self).__init__()
+
     @classmethod
     def from_key(cls, key, full_name=None, namespace=MPW_DEFAULT_NAMESPACE,
                  version=3):
         """Create a new MPW from a pre-calculated key"""
         if full_name is not None:
             full_name = decode_if(full_name)
-        return tuple.__new__(cls,
-                             (encode_if(key), namespace, version, full_name))
+        return tuple.__new__(
+            cls, (encode_if(key), namespace, version, full_name)
+        )
 
     @staticmethod
     def calculate_salt(full_name, namespace=MPW_DEFAULT_NAMESPACE):
@@ -90,8 +99,10 @@ class MPW(tuple):
 
     @staticmethod
     def calculate_key(master_password, salt):
-        return bytearray(scrypt(encode_if(master_password), salt,
-                                SCRYPT_N, SCRYPT_r, SCRYPT_p, SCRYPT_dk_len))
+        return bytearray(scrypt(
+            encode_if(master_password), salt,
+            SCRYPT_N, SCRYPT_r, SCRYPT_p, SCRYPT_dk_len
+        ))
 
     def seed(self, site, namespace=None, counter=1, context=None):
         if namespace is None:
@@ -123,8 +134,9 @@ class MPW(tuple):
             namespace = self.namespace.name
         else:
             try:
-                namespace = getattr(self.namespace, decode_if(namespace),
-                                    decode_if(namespace))
+                namespace = getattr(
+                    self.namespace, decode_if(namespace), decode_if(namespace)
+                )
             except TypeError:
                 pass
             except ValueError:
@@ -162,11 +174,13 @@ class MPW(tuple):
 
     def answer(self, site, counter=1, context=''):
         return self.generate(
-            site, counter, context, 'phrase', self.namespace.answer)
+            site, counter, context, 'phrase', self.namespace.answer
+        )
 
     def pin(self, site, counter=1):
         return self.generate(
-            site, counter, None, 'pin', self.namespace.password)
+            site, counter, None, 'pin', self.namespace.password
+        )
 
     @property
     def key(self):
@@ -185,13 +199,17 @@ class MPW(tuple):
         return self[3]
 
     identicon_characters = (
-        (u'\u2554', u'\u255A', u'\u2570', u'\u2550'),  # left_arm
-        (
+        (   # left_arm
+            u'\u2554', u'\u255A', u'\u2570', u'\u2550'
+        ),
+        (   # body
             u'\u2588', u'\u2591', u'\u2592',
             u'\u2593', u'\u263A', u'\u263B'
-        ),  # body
-        (u'\u2557', u'\u255D', u'\u256F', u'\u2550'),  # right_arm
-        (
+        ),
+        (   # right_arm
+            u'\u2557', u'\u255D', u'\u256F', u'\u2550'
+        ),
+        (   # accessory
             u'\u25C8', u'\u25CE', u'\u25D0', u'\u25D1', u'\u25D2', u'\u25D3',
             u'\u2600', u'\u2601', u'\u2602', u'\u2603', u'\u2604', u'\u2605',
             u'\u2606', u'\u260E', u'\u260F', u'\u2388', u'\u2302', u'\u2618',
@@ -202,13 +220,14 @@ class MPW(tuple):
             u'\u266A', u'\u266B', u'\u2690', u'\u2691', u'\u2694', u'\u2696',
             u'\u2699', u'\u26A0', u'\u2318', u'\u23CE', u'\u2704', u'\u2706',
             u'\u2708', u'\u2709', u'\u270C'
-        )  # accessory
+        )
     )
 
     @classmethod
     def identicon(cls, full_name, master_password):
-        seed = bytearray(hmac.new(encode_if(
-            master_password), encode_if(full_name), hashlib.sha256).digest())
+        seed = bytearray(hmac.new(
+            encode_if(master_password), encode_if(full_name), hashlib.sha256
+        ).digest())
         return ''.join(
             c[seed[i] % len(c)] for i, c in enumerate(cls.identicon_characters)
         )
@@ -221,14 +240,25 @@ class MPW(tuple):
         repr_ = info.join(object.__repr__(self).rsplit('at', 1))
         if self.namespace.name is not None:
             return '{} with namespace {!r}>'.format(
-                repr_[:-1], self.namespace.name.decode())
+                repr_[:-1], self.namespace.name.decode()
+            )
         return repr_
 
     def __eq__(self, other):
-        return isinstance(other, tuple) and (self[:-1] == other[:-1])
+        if isinstance(other, tuple):
+            if self[:-1] != other[:-1]:
+                if len(other) != 4:
+                    if (self[-1] is None) or (other[-1] is None):
+                        return True
+                    if self[-1] == other[-1]:
+                        return True
+        return NotImplemented
 
     def __ne__(self, other):
-        return not (self == other)
+        eq = self.__eq__(other)
+        if eq is NotImplemented:
+            return NotImplemented
+        return not eq
 
     def __ge__(self, other):
         return NotImplemented
