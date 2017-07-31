@@ -70,7 +70,6 @@ setup_args = dict(
     extras_require={
         'scrypt': ['scrypt'],
         'pyscrypt': ['pyscrypt'],
-        'mpsites': ['jwcrypto'],
         'crypto': ['cryptography']
     },
 

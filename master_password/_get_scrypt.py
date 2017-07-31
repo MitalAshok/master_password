@@ -1,7 +1,5 @@
 __all__ = ('scrypt',)
 
-scrypt = None
-
 try:
     from hashlib import scrypt
 except ImportError:
@@ -15,19 +13,22 @@ except ImportError:
             return kdf.derive(password)
     except ImportError:
         try:
-            from scrypt import hash as scrypt
+            from scrypt import hash
+
+            def scrypt(password, salt, N, r, p, dk_len):
+                return hash(password, salt, N, r, p, dk_len)
         except ImportError:
             try:
-                from pyscrypt import hash as scrypt
+                from pyscrypt import hash
+
+                def scrypt(password, salt, N, r, p, dk_len):
+                    return hash(password, salt, N, r, p, dk_len)
             except ImportError:
-                pass
+                msg = "No module named 'cryptography', 'scrypt' or 'pyscrypt'"
+                try:
+                    error = ModuleNotFoundError(msg)
+                except NameError:
+                    error = ImportError(msg)
 
-if scrypt is None:
-    msg = "No module named 'scrypt' or 'pyscrypt'"
-    try:
-        error = ModuleNotFoundError(msg)
-    except NameError:
-        error = ImportError(msg)
-
-    def scrypt(password, salt, N, r, p, dk_len):
-        raise error
+                def scrypt(password, salt, N, r, p, dk_len):
+                    raise error

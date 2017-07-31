@@ -6,7 +6,8 @@ import argparse
 import getpass
 
 _PACKAGE_DIR = os.path.abspath(
-    os.path.join(os.path.abspath(os.path.dirname(__file__)), '..'))
+    os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)
+)
 # Ensure that the import can happen correctly
 sys.path.insert(0, _PACKAGE_DIR)
 
