@@ -72,7 +72,7 @@ class MPW(tuple):
             full_name = None
         else:
             full_name = decode_if(full_name)
-        return tuple.__new__(cls, (key, namespace, version, full_name))
+        return super(MPW, cls).__new__(cls, (key, namespace, version, full_name))
 
     def __init__(
             self, full_name, master_password, namespace=None,
@@ -86,7 +86,7 @@ class MPW(tuple):
         """Create a new MPW from a pre-calculated key"""
         if full_name is not None:
             full_name = decode_if(full_name)
-        return tuple.__new__(
+        return super(MPW, cls).__new__(
             cls, (encode_if(key), namespace, version, full_name)
         )
 
@@ -119,7 +119,8 @@ class MPW(tuple):
             data.extend(context)
 
         return bytearray(
-            hmac.new(self.key, bytes(data), hashlib.sha256).digest())
+            hmac.new(self.key, bytes(data), hashlib.sha256).digest()
+        )
 
     def generate(self, site, counter=1, context=None,
                  template='long', namespace=None, extended=False):
@@ -167,7 +168,8 @@ class MPW(tuple):
 
     def password(self, site, counter=1, template='long'):
         return self.generate(
-            site, counter, None, template, self.namespace.password)
+            site, counter, None, template, self.namespace.password
+        )
 
     def login(self, site, counter=1):
         return self.generate(site, counter, None, 'name', self.namespace.login)
@@ -184,19 +186,19 @@ class MPW(tuple):
 
     @property
     def key(self):
-        return self[0]
+        return tuple.__getitem__(self, 0)
 
     @property
     def namespace(self):
-        return self[1]
+        return tuple.__getitem__(self, 1)
 
     @property
     def version(self):
-        return self[2]
+        return tuple.__getitem__(self, 2)
 
     @property
     def full_name(self):
-        return self[3]
+        return tuple.__getitem__(self, 3)
 
     identicon_characters = (
         (   # left_arm
@@ -245,13 +247,19 @@ class MPW(tuple):
         return repr_
 
     def __eq__(self, other):
-        if isinstance(other, tuple):
-            if self[:-1] != other[:-1]:
-                if len(other) != 4:
-                    if (self[-1] is None) or (other[-1] is None):
-                        return True
-                    if self[-1] == other[-1]:
-                        return True
+        if self is other:
+            return True
+        if isinstance(other, MPW):
+            if (
+                self.key == other.key and
+                self.namespace == other.namespace and
+                self.version == other.version
+            ):
+                if self.full_name is None or other.full_name is None:
+                    return True
+                if self.full_name == other.full_name:
+                    return True
+            return False
         return NotImplemented
 
     def __ne__(self, other):
@@ -271,6 +279,17 @@ class MPW(tuple):
 
     def __lt__(self, other):
         return NotImplemented
+
+    __add__ = None
+    __contains__ = None
+    __getitem__ = None
+    __iter__ = None
+    __len__ = None
+    __mul__ = None
+    __rmul__ = None
+    count = None
+    index = None
+
 
 if __name__ == '__main__':
     import sys

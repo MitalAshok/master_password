@@ -63,7 +63,7 @@ _HELP = {
     'counter': (
         'R|'
         'The value of the counter.\n'
-        '    Defaults tp {env[counter]} in env or 1.'
+        '    Defaults to {env[counter]} in env or 1.'
     ).format(env=_ENV),
     'version': (
         'R|'

@@ -1,13 +1,15 @@
-# Based on https://gist.github.com/sscherfke/fe58bb5bcc3e5028b9199902bf895d7e
+# Based on https://github.com/Lyndir/MasterPassword/issues/164#issuecomment-310868274
 # See https://github.com/Lyndir/MasterPassword/issues/164
+
+# Unfinished
+raise ImportError('Cannot import name \'mpsites\'')
 
 import json
 import collections
+import base64
 
-import jwcrypto.jwe
-import jwcrypto.common
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives.ciphers.algorithms import AES
+
 
 try:
     from master_password._get_scrypt import backend
@@ -33,16 +35,16 @@ def _version(n):
     return register
 
 
-def encode(users, default, version=2):
+def encode(users, default, version=1):
     f = _versions.get(version, None)
     if f is None:
         raise ValueError('Invalid version: {!r}'.format(version))
     return f(users, default)
 
 
-@_version(2.0)
-@_version(2)
-def _encode_v2(users):
+@_version(1)
+@_version(1.0)
+def _encode(users, default):
     users_dict = {}
     mpsites = {
         'version': 2,
@@ -81,4 +83,4 @@ def _encode_v2(users):
 
 User = collections.namedtuple('User', ('key', 'full_name', 'sites', 'version'))
 
-raise NotImplementedError
+# raise NotImplementedError

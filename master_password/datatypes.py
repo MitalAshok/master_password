@@ -86,6 +86,7 @@ class MPWTemplate(tuple):
     def reset(cls):
         cls.reg = DEFAULT_TEMPLATES.copy()
         cls.chars = DEFAULT_CHARS.copy()
+        cls.aliases = ALIASES.copy()
 
 
 class MPWNameSpace(tuple):
@@ -131,6 +132,7 @@ class MPWNameSpace(tuple):
     def __repr__(self):
         return '{}({!r})'.format(
             getattr(type(self), '__qualname__', type(self).__name__),
-            self.name.decode())
+            self.name.decode()
+        )
 
 default = MPWNameSpace.create('com.lyndir.masterpassword')
