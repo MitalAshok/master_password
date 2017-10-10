@@ -13,8 +13,10 @@ def encode_if(s, errors='strict', encoding='utf-8'):
 
 
 def decode_if(s, errors='strict', encoding='utf-8'):
-    if isinstance(s, (bytes, bytearray)):
-        return s.decode(encoding, errors)
+    if isinstance(s, bytes):
+        return bytes.decode(s, encoding, errors)
+    if isinstance(s, bytearray):
+        return bytearray.decode(s, encoding, errors)
     if isinstance(s, (tuple, list)):
         return bytearray(s).decode(encoding, errors)
     return unicode(s)

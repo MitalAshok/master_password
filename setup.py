@@ -15,7 +15,9 @@ __dir__ = path.abspath(path.dirname(__file__))
 sys.path.insert(0, __dir__)
 
 try:
-    from master_password import __version__
+    from master_password import (
+        __version__, __author__, __author_email__, __license__
+    )
 finally:
     sys.path.pop(0)
 
@@ -37,10 +39,10 @@ setup_args = dict(
 
     url='https://github.com/MitalAshok/master_password',
 
-    author='MitalAshok',
-    author_email='mital.vaja[AT]googlemail.com',
+    author=__author__,
+    author_email=__author_email__,
 
-    license='GPL-3.0',
+    license=__license__,
 
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -67,6 +69,7 @@ setup_args = dict(
 
     # $ pip install master_password[scrypt]
     # $ pip install master_password[pyscrypt]
+    # $ pip install master_password[crypto]
     extras_require={
         'scrypt': ['scrypt'],
         'pyscrypt': ['pyscrypt'],

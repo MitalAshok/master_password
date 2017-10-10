@@ -198,9 +198,14 @@ def main(argv=sys.argv[1:]):
         if debug:
             print('Identicon: ' + repr(identicon.encode('utf-8')) + '\n')
 
-        sys.stdout.write('[ ')
-        sys.stdout.write(identicon)
-        sys.stdout.write(' ]: ')
+        try:
+            sys.stdout.write(u'[ {} ]: '.format(identicon))
+        except UnicodeError as e:
+            sys.stderr.write(
+                '\nError writing identicon: {}\n'.format(e) +
+                'Please pass the -i argument to avoid attempting to '
+                'display the identicon.\n'
+            )
         sys.stdout.flush()
 
     mpw = master_password.MPW(full_name, mpw, version=version)

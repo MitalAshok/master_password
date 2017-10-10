@@ -32,9 +32,9 @@ __author__ = 'Mital Ashok'
 __credits__ = ['Maarten Billemont',  # Creator of the Master Password algorithm
                'Mital Ashok']
 __license__ = 'GPL-3.0'
-__version__ = '1.2.2'
+__version__ = '1.3.0'
 __maintainer__ = 'Mital Ashok'
-__author_email__ = __email__ = 'mital.vaja[AT]googlemail.com'
+__author_email__ = __email__ = 'mital.vaja@googlemail.com'
 __status__ = 'Production'
 
 __all__ = ('MPWNameSpace', 'MPWTemplate', 'MPW_DEFAULT_NAMESPACE', 'MPW')
